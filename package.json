@@ -1,0 +1,47 @@
+{
+  "name": "shieldedinventory-backend",
+  "version": "1.0.0",
+  "description": "Shield Inventory es un sistema backend diseñado con foco en **seguridad**, **organización modular** y **escalabilidad**. Implementa una API RESTful protegida contra ataques comunes como XSS, CSRF, SQL Injection y fuerza bruta. Ideal para proyectos que requieren autenticación con roles y permisos, protección de sesiones y un manejo robusto de productos e inventario.",
+  "main": "index.js",
+  "_moduleAliases": {
+    "@models": "src/models",
+    "@config": "src/config",
+    "@middlewares": "src/middlewares",
+    "@controllers": "src/controllers",
+    "@routes": "src/routes",
+    "@services": "src/services",
+    "@utils": "src/utils",
+    "@validators": "src/validators",
+    "@loaders": "src/loaders"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FierceSpectrum/ShieldedInventory-Backend.git"
+  },
+  "author": "Benjamín Sandí",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FierceSpectrum/ShieldedInventory-Backend/issues"
+  },
+  "homepage": "https://github.com/FierceSpectrum/ShieldedInventory-Backend#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "connect-pg-simple": "^10.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.18.1",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "module-alias": "^2.2.3",
+    "pg": "^8.14.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.7"
+  }
+}

@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    container_name: ShieldedInventory
+    ports:
+      - "3003:3003"
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=codeguardian
+      - DB_PASSWORD=c0d3gu4rd14n
+      - DB_NAME=shieldedInventory
+    depends_on:
+      - postgres
+    volumes:
+      - .:/usr/src/app
+    restart: always
+
+  postgres:
+    image: postgres:14
+    container_name: secure-db
+    environment:
+      POSTGRES_DB: shieldedInventory
+      POSTGRES_USER: codeguardian
+      POSTGRES_PASSWORD: c0d3gu4rd14n
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
