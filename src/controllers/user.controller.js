@@ -9,8 +9,8 @@ module.exports = {
       return res.status(400).json({ errors: errors.array() });
 
     try {
-      const { username, name, password, roleId } = req.body;
-      const user = await User.create({ username, name, password, roleId });
+      const { username, name, identification, password, roleId } = req.body;
+      const user = await User.create({ username, name, identification, password, roleId });
       res.status(201).json(user.id);
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -23,6 +23,7 @@ module.exports = {
       const filteredUsers = users.map((user) => ({
         id: user.id,
         name: user.name,
+        identification: user.identification,
         lastLogin: user.lastLogin,
         Role: user.Role ? user.Role.name : null,
       }));
@@ -40,6 +41,7 @@ module.exports = {
       const filteredUser = {
         id: user.id,
         name: user.name,
+        identification: user.identification,
         lastLogin: user.lastLogin,
         Role: user.Role ? user.Role.name : null,
       };
@@ -59,6 +61,7 @@ module.exports = {
       const filteredUser = {
         id: user.id,
         name: user.name,
+        identification: user.identification,
         lastLogin: user.lastLogin,
         Role: user.Role ? user.Role.name : null,
       };
