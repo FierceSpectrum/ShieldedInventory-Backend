@@ -13,7 +13,7 @@ router.put('/:id', validateUser, jwtAuth, authorize('update_users'), userControl
 router.delete('/:id', jwtAuth, authorize('delete_users'), userController.delete);
 
 // Extra lógica
-router.patch('/:id/password', jwtAuth, userController.changePassword);
+router.patch('/:id/password', validateUser, jwtAuth, userController.changePassword);
 router.patch('/:id/last-login', jwtAuth, userController.updateLastLogin);
 
 module.exports = router;

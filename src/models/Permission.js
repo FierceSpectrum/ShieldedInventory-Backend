@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       allowNull: false,
     },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   });
 
   Permission.associate = (models) => {

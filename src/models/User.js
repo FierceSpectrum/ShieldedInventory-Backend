@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         allowNull: false,
       },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -26,11 +30,19 @@ module.exports = (sequelize, DataTypes) => {
             const salt = await bcrypt.genSalt(10);
             user.password = await bcrypt.hash(user.password, salt);
           }
+          if (user.changed("username")) {
+            const salt = await bcrypt.genSalt(10);
+            user.username = await bcrypt.hash(user.username, salt);
+          }
         },
         beforeUpdate: async (user) => {
           if (user.changed("password")) {
             const salt = await bcrypt.genSalt(10);
             user.password = await bcrypt.hash(user.password, salt);
+          }
+          if (user.changed("username")) {
+            const salt = await bcrypt.genSalt(10);
+            user.username = await bcrypt.hash(user.username, salt);
           }
         },
       },

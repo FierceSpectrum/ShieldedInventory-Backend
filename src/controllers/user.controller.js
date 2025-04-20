@@ -9,9 +9,9 @@ module.exports = {
       return res.status(400).json({ errors: errors.array() });
 
     try {
-      const { username, password, roleId } = req.body;
-      const user = await User.create({ username, password, roleId });
-      res.status(201).json(user);
+      const { username, name, password, roleId } = req.body;
+      const user = await User.create({ username, name, password, roleId });
+      res.status(201).json(user.id);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -20,7 +20,13 @@ module.exports = {
   async findAll(req, res) {
     try {
       const users = await User.findAll({ include: [Role] });
-      res.json(users);
+      const filteredUsers = users.map((user) => ({
+        id: user.id,
+        name: user.name,
+        lastLogin: user.lastLogin,
+        Role: user.Role ? user.Role.name : null,
+      }));
+      res.json(filteredUsers);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -30,7 +36,14 @@ module.exports = {
     try {
       const user = await User.findByPk(req.params.id, { include: [Role] });
       if (!user) return res.status(404).json({ error: "User not found" });
-      res.json(user);
+
+      const filteredUser = {
+        id: user.id,
+        name: user.name,
+        lastLogin: user.lastLogin,
+        Role: user.Role ? user.Role.name : null,
+      };
+      res.json(filteredUser);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -41,8 +54,15 @@ module.exports = {
       const user = await User.findByPk(req.params.id);
       if (!user) return res.status(404).json({ error: "User not found" });
 
-      await user.update(req.body);
-      res.json(user);
+      const { password, ...updateData } = req.body;
+      await user.update(updateData);
+      const filteredUser = {
+        id: user.id,
+        name: user.name,
+        lastLogin: user.lastLogin,
+        Role: user.Role ? user.Role.name : null,
+      };
+      res.json(filteredUser);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
@@ -63,12 +83,15 @@ module.exports = {
   async changePassword(req, res) {
     try {
       const { oldPassword, newPassword } = req.body;
-      const user = await User.findByPk(req.user.id);
-
+      const user = await User.findByPk(req.params.id);
+      if (!user) return res.status(404).json({ error: "User not found" });
+      
       const valid = await bcrypt.compare(oldPassword, user.password);
       if (!valid)
         return res.status(400).json({ error: "Old password incorrect" });
-
+      if (oldPassword === newPassword) {
+        return res.status(400).json({ error: "New password cannot be the same as the old password" });
+      }
       user.password = newPassword;
       await user.save();
       res.json({ message: "Password updated" });
@@ -77,7 +100,16 @@ module.exports = {
     }
   },
 
-  async updateLastLogin(id) {
-    await User.update({ lastLogin: new Date() }, { where: { id } });
+  async updateLastLogin(req, res) {
+    try {
+      const user = await User.findByPk(req.params.id);
+      if (!user) return res.status(404).json({ error: "User not found" });
+
+      const updatedAt = new Date();
+      await user.update({ lastLogin: updatedAt });
+      res.json({ message: "Last login updated", updatedAt });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
   },
 };

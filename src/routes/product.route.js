@@ -13,6 +13,5 @@ router.delete('/:id', jwtAuth, authorize('delete_products'), productController.d
 
 // Extra lógica
 router.patch('/:id/inventory', jwtAuth, productController.reduceStock);
-// router.get('/:id/history', jwtAuth, productController.getHistory);
 
 module.exports = router;

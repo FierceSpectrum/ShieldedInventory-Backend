@@ -4,8 +4,11 @@ const permissionController = require('@controllers/permission.controller.js');
 const jwtAuth  = require('@middlewares/jwtAuth.js');
 const { authorize } = require('@middlewares/authorize.js');
 
-// router.get('/', jwtAuth, authorize('read_permissions'), permissionController.getAllPermissions);
-// router.get('/:id', jwtAuth, authorize('read_permissions'), permissionController.getPermissionById);
+router.post('/', jwtAuth, authorize('create_permissions'), permissionController.create);
+router.get('/', jwtAuth, authorize('read_permissions'), permissionController.findAll);
+router.get('/:id', jwtAuth, authorize('read_permissions'), permissionController.findOne);
+router.put('/:id', jwtAuth, authorize('update_permissions'), permissionController.update);
+router.delete('/:id', jwtAuth, authorize('delete_permissions'), permissionController.delete);
 
 // Extra lógica
 router.get('/:id/roles', jwtAuth, authorize('read_permissions'), permissionController.rolesWithPermission);

@@ -12,6 +12,6 @@ module.exports = function loadMiddlewares(app) {
   app.use(express.json());
   app.use(cookieParser());
   app.use(sessionMiddleware);
-  app.use(limiter);
+  // app.use(limiter);
   app.use(jwtAuth);
 };

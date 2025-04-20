@@ -23,7 +23,11 @@ loadMiddlewares(app);
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/roles", roleRoutes);
-app.use("/api/permission", permissionRoutes);
+app.use("/api/permissions", permissionRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 // Base de datos y servidor
 db.sync({ alert: true })
