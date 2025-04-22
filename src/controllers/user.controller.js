@@ -1,16 +1,28 @@
-const { User, Role, Product } = require("../models");
-const { validationResult } = require("express-validator");
+const { User, Role } = require("@models");
 const bcrypt = require("bcryptjs");
 
 module.exports = {
   async create(req, res) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(400).json({ errors: errors.array() });
-
     try {
       const { username, name, identification, password, roleId } = req.body;
-      const user = await User.create({ username, name, identification, password, roleId });
+
+      // Fetch all users to compare encrypted usernames
+      const users = await User.findAll();
+      const usernameExists = users.some(user => bcrypt.compareSync(username, user.username));
+
+      if (usernameExists) {
+      return res.status(400).json({ error: "Username already exists" });
+      }
+
+      // Create the user
+      const user = await User.create({ 
+      username, 
+      name, 
+      identification, 
+      password, 
+      roleId 
+      });
+
       res.status(201).json(user.id);
     } catch (err) {
       res.status(500).json({ error: err.message });

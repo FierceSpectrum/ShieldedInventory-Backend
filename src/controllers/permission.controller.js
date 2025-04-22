@@ -1,5 +1,5 @@
 // src/controllers/permission.controller.js
-const { Permission, Role } = require("../models");
+const { Permission, Role } = require("@models");
 
 module.exports = {
   async create(req, res) {

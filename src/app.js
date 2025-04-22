@@ -7,19 +7,21 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 
-const db = require("./config/database.js");
+const db = require("@config/database.js");
 const loadMiddlewares = require("@loaders/middlewareLoader.js");
 
 // Rutas
-const userRoutes = require("./routes/user.route.js");
-const productRoutes = require("./routes/product.route.js");
-const roleRoutes = require("./routes/role.route.js");
-const permissionRoutes = require("./routes/permission.route.js");
+const authRoutes = require("@routes/auth.route.js");
+const userRoutes = require("@routes/user.route.js");
+const productRoutes = require("@routes/product.route.js");
+const roleRoutes = require("@routes/role.route.js");
+const permissionRoutes = require("@routes/permission.route.js");
 
 // Carga todos los middlewares
 loadMiddlewares(app);
 
 // Rutas del sistema
+app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/roles", roleRoutes);

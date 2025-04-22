@@ -1,5 +1,5 @@
 // src/controllers/product.controller.js
-const { Product, User } = require("../models");
+const { Product, User } = require("@models");
 
 module.exports = {
   async create(req, res) {
