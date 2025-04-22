@@ -6,7 +6,8 @@ function jwtAuth(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+    req.user = decoded.user;
+    req.permissions = decoded.permissions || [];
     next();
   } catch (err) {
     res.status(403).json({ message: "Invalid token" });

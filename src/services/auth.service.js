@@ -1,67 +1,72 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const { User } = require('@models');
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const { User } = require("@models");
 
-const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
+const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 
 // Servicio para generar un token
-function generateToken(user) {
-    const payload = {
-        id: user.id,
-        name: user.name,
-        identification: user.identification,
-        lastLogin: user.lastLogin,
-        role: user.role,
-    };
+function generateToken(user, permissions) {
+  const payload = {
+    user: {
+      id: user.id,
+      name: user.name,
+      identification: user.identification,
+      lastLogin: user.lastLogin,
+      roleId: user.roleId,
+      role: user.role,
+    },
+    permissions: ["permission_read", "role_read"],
+  };
 
-    return jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' }); // Token válido por 1 hora
+  return jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" }); // Token válido por 1 hora
 }
 
 // Servicio para autenticar al usuario
 async function authenticateUser(username, password) {
-    const users = await User.findAll();
-    let user = null;
-    for (const u of users) {
-        if (await bcrypt.compare(username, u.username)) {
-            user = u;
-            break;
-        }
+  const users = await User.findAll();
+  let user = null;
+  for (const u of users) {
+    if (await bcrypt.compare(username, u.username)) {
+      user = u;
+      break;
     }
-    if (!user) {
-        throw new Error('Usuario no encontrado');
-    }
+  }
+  if (!user) {
+    throw new Error("Usuario no encontrado");
+  }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+  const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordValid) {
-        throw new Error('Contraseña incorrecta');
-    }
+  if (!isPasswordValid) {
+    throw new Error("Contraseña incorrecta");
+  }
 
-    const filteredUser = {
-        id: user.id,
-        name: user.name,
-        identification: user.identification,
-        lastLogin: new Date(),
-        role: user.role,
-    };
+  const filteredUser = {
+    id: user.id,
+    name: user.name,
+    identification: user.identification,
+    lastLogin: new Date(),
+    roleId: user.roleId,
+    role: user.role,
+  };
 
-    return filteredUser;
+  return filteredUser;
 }
 
 async function updateLastLogin(userId) {
-    const user = await User.findByPk(userId);
-    if (!user) {
-        throw new Error('Usuario no encontrado');
-    }
+  const user = await User.findByPk(userId);
+  if (!user) {
+    throw new Error("Usuario no encontrado");
+  }
 
-    user.lastLogin = new Date();
-    await user.save();
+  user.lastLogin = new Date();
+  await user.save();
 
-    return user;
+  return user;
 }
 
 module.exports = {
-    generateToken,
-    authenticateUser,
-    updateLastLogin
+  generateToken,
+  authenticateUser,
+  updateLastLogin,
 };
