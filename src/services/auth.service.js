@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { User } = require('@models');
 
 const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
@@ -19,10 +19,14 @@ function generateToken(user) {
 
 // Servicio para autenticar al usuario
 async function authenticateUser(username, password) {
-    const salt = await bcrypt.genSalt(10);
-    const encryptedUsername = bcrypt.hash(username, salt);
-    const user = await User.findOne({ where: { username: encryptedUsername } });
-
+    const users = await User.findAll();
+    let user = null;
+    for (const u of users) {
+        if (await bcrypt.compare(username, u.username)) {
+            user = u;
+            break;
+        }
+    }
     if (!user) {
         throw new Error('Usuario no encontrado');
     }

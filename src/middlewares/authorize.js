@@ -1,9 +1,9 @@
 const { Role, Permission } = require("@models");
 
-const authorize = (requiredPermission) => {
+const authorize = (requiredPermission = []) => {
   return async (req, res, next) => {
     try {
-      // const user = req.user; // debe venir del middleware jwtAuth o sessionAuth
+      // const user = req.user;
 
       // if (!user || !user.roleId) {
       //   return res

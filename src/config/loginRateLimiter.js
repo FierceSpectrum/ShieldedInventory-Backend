@@ -1,10 +1,10 @@
 const rateLimit = require("express-rate-limit");
 
-const loginLimiter  = rateLimit({
+const loginLimiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 5,
+  max: 10,
   keyGenerator: (req) => req.ip,
-  skipSuccessResponse: true,
+  skip: (req, res) => res.status < 400,
   handler: (req, res) => {
     res.status(429).json({
       error: "Too many requests, please try again later.",
