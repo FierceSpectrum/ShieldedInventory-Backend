@@ -65,18 +65,27 @@ module.exports = {
 
   async update(req, res) {
     try {
-      const user = await User.findByPk(req.params.id);
+      const user = await User.findByPk(req.params.id, { include: [Role] });
       if (!user) return res.status(404).json({ error: "User not found" });
 
       const { password, ...updateData } = req.body;
+
+      // Ensure roleId is valid if provided
+      if (updateData.roleId) {
+      const role = await Role.findByPk(updateData.roleId);
+      if (!role) return res.status(404).json({ error: "Role not found" });
+      }
+
       await user.update(updateData);
+
       const filteredUser = {
-        id: user.id,
-        name: user.name,
-        identification: user.identification,
-        lastLogin: user.lastLogin,
-        Role: user.Role ? user.Role.name : null,
+      id: user.id,
+      name: user.name,
+      identification: user.identification,
+      lastLogin: user.lastLogin,
+      Role: user.Role ? user.Role.name : null,
       };
+
       res.json(filteredUser);
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -127,4 +136,20 @@ module.exports = {
       res.status(500).json({ error: err.message });
     }
   },
+
+  async assignRoles(req, res) {
+    try {
+      const { roleId } = req.body;
+      const user = await User.findByPk(req.params.id);
+      if (!user) return res.status(404).json({ error: "User not found" });
+
+      const role = await Role.findByPk(roleId);
+      if (!role) return res.status(404).json({ error: "Role not found" });
+
+      await user.update({ roleId });
+      res.json({ message: "Role assigned successfully", userId: user.id, roleId });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  }
 };

@@ -1,5 +1,4 @@
 const { User } = require("@models");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const AuthService = require("@services/auth.service");
 
@@ -15,7 +14,8 @@ const login = async (req, res) => {
 
     // Generate JWT token
     const token = AuthService.generateToken(user);
-
+    // Update last login time
+    await AuthService.updateLastLogin(user.id);
     return res.status(200).json({ token, user });
   } catch (error) {
     console.error("Login error:", error);

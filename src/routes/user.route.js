@@ -17,5 +17,6 @@ router.delete('/:id', authorize('delete_users'), userController.delete);
 // Extra lógica
 router.patch('/:id/password', validateUser, userController.changePassword);
 router.patch('/:id/last-login', userController.updateLastLogin);
+router.patch('/:id/assign-roles', authorize('assign_roles'), userController.assignRoles);
 
 module.exports = router;

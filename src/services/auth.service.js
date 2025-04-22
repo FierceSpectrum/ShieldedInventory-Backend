@@ -41,14 +41,27 @@ async function authenticateUser(username, password) {
         id: user.id,
         name: user.name,
         identification: user.identification,
-        lastLogin: user.lastLogin,
+        lastLogin: new Date(),
         role: user.role,
     };
 
     return filteredUser;
 }
 
+async function updateLastLogin(userId) {
+    const user = await User.findByPk(userId);
+    if (!user) {
+        throw new Error('Usuario no encontrado');
+    }
+
+    user.lastLogin = new Date();
+    await user.save();
+
+    return user;
+}
+
 module.exports = {
     generateToken,
     authenticateUser,
+    updateLastLogin
 };
