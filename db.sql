@@ -82,10 +82,10 @@ VALUES
   ('role_update', 'Modificar roles', NOW(), NOW()),
   ('role_delete', 'Eliminar roles', NOW(), NOW()),
   -- Permisos de permisos
-  ('permission_create', 'Crear nuevos permisos', NOW(), NOW()),
-  ('permission_read', 'Ver listado de permisos', NOW(), NOW()),
-  ('permission_update', 'Modificar permisos', NOW(), NOW()),
-  ('permission_delete', 'Eliminar permisos', NOW(), NOW()),
+  -- ('permission_create', 'Crear nuevos permisos', NOW(), NOW()),
+  -- ('permission_read', 'Ver listado de permisos', NOW(), NOW()),
+  -- ('permission_update', 'Modificar permisos', NOW(), NOW()),
+  -- ('permission_delete', 'Eliminar permisos', NOW(), NOW()),
   -- Permisos de productos
   ('product_create', 'Crear nuevos productos', NOW(), NOW()),
   ('product_read', 'Ver listado de productos', NOW(), NOW()),
